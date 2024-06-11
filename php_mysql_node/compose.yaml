@@ -24,6 +24,8 @@ services:
       - ./node:/home/node/app
     working_dir: /home/node/app
     command: npm start
+    ports:
+      - 3000:3000
     networks:
       - backend
 
