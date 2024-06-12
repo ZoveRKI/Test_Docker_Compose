@@ -3,34 +3,31 @@ services:
     image: php:8.1-fpm
     container_name: php
     volumes:
-      - ./php:/var/www/html
-    networks:
-      - backend
+      - ./backend:/var/www/html
+    ports:
+      - 9000:9000
 
   mysql:
     image: mysql:8.0
     container_name: mysql
     volumes:
-      - mysql_data:/var/lib/mysql
+      - db-data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=123456
-    networks:
-      - backend
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 3306:3306
 
   node:
     image: node:22
     container_name: node
     volumes:
-      - ./node:/home/node/app
-    working_dir: /home/node/app
+      - ./frontend:/app
+    working_dir: /app
     command: npm start
     ports:
       - 3000:3000
-    networks:
-      - backend
+    depends_on:
+      - php
 
 volumes:
-  mysql_data:
-
-networks:
-  backend:
+  db-data:
